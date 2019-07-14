@@ -33,13 +33,15 @@
         "bootstrap": "4.3.1",
         "jquery": ">=3.4.0",
         "jquery.easing": "^1.4.1",
+        "lodash": ">=4.17.13",
+        "lodash.template": ">=4.5.0",
         "tar": ">=4.4.2",
         "fstream": ">=1.0.12",
         "axios": ">=0.19.0",
         "popper.js": "^1.14.7"
     },
     "devDependencies": {
-        "browser-sync": "^2.26.5",
+        "browser-sync": "^2.26.7",
         "del": "4.0.0",
         "gulp": "4.0.0",
         "gulp-autoprefixer": "6.0.0",
