@@ -8,3 +8,4 @@ _site/
 vendor/
 css/
 js/*.min.js
+blog/
