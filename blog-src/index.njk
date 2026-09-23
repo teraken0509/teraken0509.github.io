@@ -1,0 +1,29 @@
+---
+layout: base.njk
+title: 記事一覧
+permalink: /
+---
+<section class="blog-index">
+  <header class="blog-index-header">
+    <h1>Blog</h1>
+    <p class="blog-lead">{{ site.description }}</p>
+  </header>
+
+  {% if collections.posts.length %}
+  <ul class="blog-post-list">
+    {% for post in collections.posts %}
+    <li>
+      <a href="{{ post.url | url }}">
+        <time datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>
+        <span class="blog-post-title">{{ post.data.title }}</span>
+      </a>
+      {% if post.data.description %}
+      <p>{{ post.data.description }}</p>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>まだ記事がありません。</p>
+  {% endif %}
+</section>

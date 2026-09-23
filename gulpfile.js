@@ -3,6 +3,7 @@
 // Load plugins
 const autoprefixer = require("gulp-autoprefixer");
 const browsersync = require("browser-sync").create();
+const { spawn } = require("child_process");
 const cleanCSS = require("gulp-clean-css");
 const del = require("del");
 const gulp = require("gulp");
@@ -113,21 +114,38 @@ function js() {
     .pipe(browsersync.stream());
 }
 
+// Eleventy blog (blog-src → blog/)
+function blog(done) {
+  const child = spawn("npx", ["@11ty/eleventy"], {
+    stdio: "inherit",
+    shell: process.platform === "win32"
+  });
+  child.on("close", (code) => {
+    if (code === 0) {
+      done();
+      return;
+    }
+    done(new Error(`eleventy exited with code ${code}`));
+  });
+}
+
 // Watch files
 function watchFiles() {
   gulp.watch("./scss/**/*", css);
   gulp.watch(["./js/**/*", "!./js/*.min.js"], js);
-  gulp.watch("./**/*.html", browserSyncReload);
+  gulp.watch("./blog-src/**/*", gulp.series(blog, browserSyncReload));
+  gulp.watch(["./**/*.html", "!./blog/**/*.html"], browserSyncReload);
 }
 
 // Define complex tasks
 const vendor = gulp.series(clean, modules);
-const build = gulp.series(vendor, gulp.parallel(css, js));
+const build = gulp.series(vendor, gulp.parallel(css, js), blog);
 const watch = gulp.series(build, gulp.parallel(watchFiles, browserSync));
 
 // Export tasks
 exports.css = css;
 exports.js = js;
+exports.blog = blog;
 exports.clean = clean;
 exports.vendor = vendor;
 exports.build = build;
